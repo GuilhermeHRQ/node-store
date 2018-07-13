@@ -11,12 +11,14 @@ const schema = new Schema({
     cpf: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        unique: [true, 'CPF já cadastrado']
     },
     email: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        unique: [true, 'Email já cadastrado']
     },
     password: {
         type: String,

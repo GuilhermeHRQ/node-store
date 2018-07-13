@@ -117,7 +117,7 @@ async function redefinirSenha(req, res, next) {
         const novaSenha = md5(req.body.novaSenha + global.SALT_KEY);
 
         // Chama o repositorio para atualizar a senha
-        await repository.redefinirSenha(user._id, novaSenha);
+        await repository.redefinirSenha(user.id, novaSenha);
 
         res.status(200).json({
             message: 'Senha alterada com sucesso'
@@ -150,14 +150,20 @@ async function gerarTokenSenha(req, res, next) {
         const emailData = {
             to: user.email,
             subject: 'Redefinição de senha - Node Store',
-            html: user.name + ', para redefinir sua senha acesse o link abaixo:\nhttp://localhost/login/redefinir/' + token
+            html: `<strong>${user.name}</strong>, para redefinir sua senha acesse o link abaixo:<br>
+                    <a href='http://localhost:4200/login/redefinir-senha/${token}' target='_blank'>Redefinir Senha</a><br><br>
+                    ou acesse pelo seguinte link: http://localhost:4200/login/redefinir-senha/${token}`
         }
 
-        await mailer(emailData);
-
-        res.status(200).json({
-            message: 'Email enviado com sucesso'
+        mailer(emailData).then((data) => {
+            res.status(200).json({
+                message: 'Email enviado com sucesso'
+            });
+        }, err => {
+            throw(err);
         });
+
+
     } catch (e) {
         res.status(500).json({
             message: 'Erro ao processar sua requisição'

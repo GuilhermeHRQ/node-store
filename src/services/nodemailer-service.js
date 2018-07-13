@@ -25,12 +25,16 @@ let mailOptions = {
  * Função que envia emails
  * @param {Object} mailOptionsExtended Objeto contendo o to, subject e text? do email
  */
-async function sendMail(mailOptionsExtended) {
+function sendMail(mailOptionsExtended) {
     Object.assign(mailOptions, mailOptionsExtended);
 
-    await transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-            return;
-        }
+    return new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                reject(err);
+            }
+
+            resolve(info);
+        });
     });
 }
