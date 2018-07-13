@@ -26,7 +26,8 @@ async function logar(req, res, next) {
             const token = await auth.generateToken({
                 id: user._id,
                 email: user.email,
-                name: user.name
+                name: user.name,
+                roles: user.roles
             });
 
             res.status(200).send({
@@ -59,7 +60,8 @@ async function refazLogin(req, res, next) {
             const token = await auth.generateToken({
                 id: user._id,
                 email: user.email,
-                name: user.name
+                name: user.name,
+                roles: user.roles
             });
 
             res.status(200).send({
@@ -144,7 +146,8 @@ async function gerarTokenSenha(req, res, next) {
         const token = await auth.generateToken({
             id: user._id,
             email: user.email,
-            name: user.name
+            name: user.name,
+            roles: user.roles
         });
 
         const emailData = {
@@ -152,7 +155,7 @@ async function gerarTokenSenha(req, res, next) {
             subject: 'Redefinição de senha - Node Store',
             html: `<strong>${user.name}</strong>, para redefinir sua senha acesse o link abaixo:<br>
                     <a href='http://localhost:4200/login/redefinir-senha/${token}' target='_blank'>Redefinir Senha</a><br><br>
-                    ou acesse pelo seguinte link: http://localhost:4200/login/redefinir-senha/${token}`
+                    ou acesse pelo seguinte link: <br> http://localhost:4200/login/redefinir-senha/${token}`
         }
 
         mailer(emailData).then((data) => {
@@ -160,7 +163,7 @@ async function gerarTokenSenha(req, res, next) {
                 message: 'Email enviado com sucesso'
             });
         }, err => {
-            throw(err);
+            throw (err);
         });
 
 

@@ -3,7 +3,8 @@
 module.exports = {
     generateToken,
     decodeToken,
-    authorize
+    authorize,
+    isAdmin
 }
 
 const jwt = require('jsonwebtoken');
@@ -47,6 +48,33 @@ function authorize(req, res, next) {
                 });
             } else {
                 next(); // Caso possua um token e ele seja válido, prossegue para as próximas requisições
+            }
+        });
+    }
+}
+
+// Verifica se o user é um admin para ter acesso a alguns métodos expecíficos
+function isAdmin(req, res, next) {
+    const token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['authorization']; // Verifica o token nesses pontos
+
+    if (!token) {
+        res.status(401).json({
+            message: 'Acesso Restrito'
+        });
+    } else {
+        jwt.verify(token, global.SALT_KEY, (error, decoded) => {
+            if (error) {
+                res.status(401).json({
+                    message: 'Token inválido'
+                });
+            } else {
+                if (decoded.roles.includes('admin')) {
+                    next();
+                } else {
+                    res.status(403).json({
+                        message: 'Esta funcionalidade é restrita para administradores'
+                    })
+                }
             }
         });
     }

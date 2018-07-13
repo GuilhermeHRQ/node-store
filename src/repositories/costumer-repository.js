@@ -32,6 +32,7 @@ async function atualizar(id, body) {
             name: body.name,
             cpf: body.cpf,
             email: body.email,
+            roles: body.role
         }
     });
 }

@@ -27,14 +27,15 @@ async function inserir(req, res, next) {
             name: req.body.name,
             cpf: req.body.cpf,
             email: req.body.email,
-            password: md5(req.body.password + global.SALT_KEY) // Função para criar uma md5 da senha para tornar mais seguro
+            password: md5(req.body.password + global.SALT_KEY), // Função para criar uma md5 da senha para tornar mais seguro
+            roles: req.body.roles
         });
 
         // Monta objeto para envio do email
         const emailData = {
             to: req.body.email,
             subject: 'Seja Bem vindo a Node Store',
-            html: 'Agradecemos muito em ter você como o nosso mais novo cliente, ' + req.body.name  
+            html: 'Agradecemos muito em ter você como o nosso mais novo cliente, ' + req.body.name
         }
 
         // Executa a função de envio do email
@@ -76,6 +77,7 @@ async function atualizar(req, res, next) {
             name: req.body.name,
             cpf: req.body.cpf,
             email: req.body.email,
+            roles: req.body.roles
         }
         await repository.atualizar(req.params.id, body);
         res.status(200).send({

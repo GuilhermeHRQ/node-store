@@ -36,7 +36,7 @@ async function inserir(req, res, next) {
     }
     try {
         // Faz o upload da imagem no Azure Storage e retorna o nome do arquivo
-        const filename = await uploadImage(req.body.image, 'product-images', 'jpg');
+        // const filename = await uploadImage(req.body.image, 'product-images', 'jpg');
 
         await repository.inserir({
             title: req.body.title,
@@ -45,7 +45,7 @@ async function inserir(req, res, next) {
             price: req.body.price,
             active: true,
             tags: req.body.tags,
-            image: 'https://guilherme.blob.core.windows.net/product-images/' + filename
+            // image: 'https://guilherme.blob.core.windows.net/product-images/' + filename
         });
         res.status(201).send({
             message: 'Produto cadastrado com sucesso!'
